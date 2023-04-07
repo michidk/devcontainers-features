@@ -22,7 +22,7 @@ See the relevant feature's README for supported options.
 {
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
-        "ghcr.io/michidk/devcontainers-features/typst": {}
+        "ghcr.io/michidk/devcontainers-features/typst:0": {}
     }
 }
 ```
