@@ -11,11 +11,7 @@ Installs typst, a new markup-based typesetting system that is powerful and easy 
 }
 ```
 
-## Options
 
-| Options Id | Description | Type | Default Value |
-|-----|-----|-----|-----|
-| version | Select version of typst. | string | latest |
 
 
 
