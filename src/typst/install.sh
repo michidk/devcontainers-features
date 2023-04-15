@@ -1,53 +1,121 @@
 #!/bin/bash
+
+# inspired by https://github.com/guiyomh/features/blob/main/src/just/install.sh
+TYPST_VERSION=${VERSION:-"latest"}
 set -e
+
+# shellcheck source=/dev/null
+source /etc/os-release
+
+# Clean up
+cleanup() {
+case "${ID}" in
+    debian|ubuntu)
+      rm -rf /var/lib/apt/lists/*
+    ;;
+  esac
+}
+
+cleanup
 
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
     exit 1
 fi
 
-clean_up() {
-    rm -rf /var/lib/apt/lists/*
-}
-
 apt_get_update() {
-    if [ "$(find /var/lib/apt/lists/* | wc -l)" = "0" ]; then
+  case "${ID}" in
+    debian|ubuntu)
+      if [ "$(find /var/lib/apt/lists/* | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update -y
-    fi
+      fi
+    ;;
+  esac
 }
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+  case "${ID}" in
+    debian|ubuntu)
+      if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update
         apt-get -y install --no-install-recommends "$@"
+      fi
+    ;;
+    alpine)
+      if ! apk -e info "$@" >/dev/null 2>&1; then
+        apk add --no-cache "$@"
+      fi
+    ;;
+  esac
+}
+
+check_git() {
+    if [ ! -x "$(command -v git)" ]; then
+        check_packages git
     fi
 }
 
-check_packages ca-certificates g++ curl git
+find_version_from_git_tags() {
+    local variable_name=$1
+    local requested_version=${!variable_name}
+    if [ "${requested_version}" = "none" ]; then return; fi
+    local repository=$2
+    local prefix=${3:-"tags/v"}
+    local separator=${4:-"."}
+    local last_part_optional=${5:-"false"}
+    if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
+        local escaped_separator=${separator//./\\.}
+        local last_part
+        if [ "${last_part_optional}" = "true" ]; then
+            last_part="(${escaped_separator}[0-9]+)*?"
+        else
+            last_part="${escaped_separator}[0-9]+"
+        fi
+        local regex="${prefix}\\K[0-9]+${escaped_separator}[0-9]+${last_part}$"
+        local version_list
+        check_git
+        check_packages ca-certificates
+        version_list="$(git ls-remote --tags "${repository}" | grep -oP "${regex}" | tr -d ' ' | tr "${separator}" "." | sort -rV)"
+        if [ "${requested_version}" = "latest" ] || [ "${requested_version}" = "current" ] || [ "${requested_version}" = "lts" ]; then
+            declare -g "${variable_name}"="$(echo "${version_list}" | head -n 1)"
+        else
+            set +e
+            declare -g "${variable_name}"="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
+            set -e
+        fi
+    fi
+    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+        echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
+        exit 1
+    fi
+    echo "${variable_name}=${!variable_name}"
+}
 
 export DEBIAN_FRONTEND=noninteractive
 
+check_packages dpkg
 
-# Check if homebrew (linuxbrew) installed.
-if ! type brew > /dev/null 2>&1; then
-    echo "Installing homebrew..."
-    # Borrowed from: https://github.com/meaningful-ooo/devcontainer-features/blob/main/src/homebrew/install.sh
-    BREW_PREFIX="/home/linuxbrew/.linuxbrew"
-    git clone --depth 1 https://github.com/Homebrew/brew "${BREW_PREFIX}/Homebrew"
-    mkdir -p "${BREW_PREFIX}/Homebrew/Library/Taps/homebrew"
-    git clone --depth 1 https://github.com/Homebrew/homebrew-core "${BREW_PREFIX}/Homebrew/Library/Taps/homebrew/homebrew-core"
-
-    "${BREW_PREFIX}/Homebrew/bin/brew" config
-    mkdir "${BREW_PREFIX}/bin"
-    ln -s "${BREW_PREFIX}/Homebrew/bin/brew" "${BREW_PREFIX}/bin"
+architecture="$(dpkg --print-architecture|grep -oP 'amd64')"
+if [ "${architecture}" != "amd64" ]; then
+    echo "(!) Architecture $architecture unsupported"
+    exit 1
 fi
 
-echo "Installing typst..."
+# Soft version matching
+find_version_from_git_tags TYPST_VERSION "https://github.com/typst/typst"
 
-/home/linuxbrew/.linuxbrew/bin/brew install typst
-ln -s /home/linuxbrew/.linuxbrew/bin/typst  /usr/local/bin
+check_packages curl ca-certificates
+echo "Downloading typst version ${TYPST_VERSION}..."
+mkdir -p /tmp/typst
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-$(uname -m)-unknown-linux-gnu.tar.gz" | tar xz -C /tmp/typst
+mv "/tmp/typst//typst-$(uname -m)-unknown-linux-gnu/typst" /usr/local/bin/typst
+rm -rf /tmp/typst
 
-clean_up
+# echo -e "\nsource <(just --completions bash)\n" >> "$_REMOTE_USER_HOME/.bashrc"
+
+# Clean up
+cleanup
+
 echo "Done!"

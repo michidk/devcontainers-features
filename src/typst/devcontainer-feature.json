@@ -4,8 +4,18 @@
     "version": "0.1.0",
     "description": "Installs typst, a new markup-based typesetting system that is powerful and easy to learn.",
     "documentationURL": "https://github.com/michidk/devcontainers-features/tree/main/src/typst",
+    "options": {
+        "version": {
+            "type": "string",
+            "proposals": [
+                "latest",
+                "0.1.0"
+            ],
+            "default": "latest",
+            "description": "Select version of typst."
+        }
+    },
     "installsAfter": [
-        "ghcr.io/devcontainers/features/common-utils",
-        "ghcr.io/meaningful-ooo/devcontainer-features/homebrew"
+        "ghcr.io/devcontainers/features/common-utils"
     ]
 }
