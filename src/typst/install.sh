@@ -95,7 +95,7 @@ find_version_from_git_tags() {
 
 export DEBIAN_FRONTEND=noninteractive
 
-check_packages dpkg
+check_packages dpkg xz-utils
 
 architecture="$(dpkg --print-architecture|grep -oP 'amd64')"
 if [ "${architecture}" != "amd64" ]; then
