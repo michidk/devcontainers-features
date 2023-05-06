@@ -109,11 +109,9 @@ find_version_from_git_tags TYPST_VERSION "https://github.com/typst/typst"
 check_packages curl ca-certificates
 echo "Downloading typst version ${TYPST_VERSION}..."
 mkdir -p /tmp/typst
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-$(uname -m)-unknown-linux-gnu.tar.gz" | tar xz -C /tmp/typst
-mv "/tmp/typst//typst-$(uname -m)-unknown-linux-gnu/typst" /usr/local/bin/typst
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-$(uname -m)-unknown-linux-musl.tar.xz" | tar xJf - -C /tmp/typst
+mv "/tmp/typst//typst-$(uname -m)-unknown-linux-musl/typst" /usr/local/bin/typst
 rm -rf /tmp/typst
-
-# echo -e "\nsource <(just --completions bash)\n" >> "$_REMOTE_USER_HOME/.bashrc"
 
 # Clean up
 cleanup

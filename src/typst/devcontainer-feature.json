@@ -1,7 +1,7 @@
 {
     "name": "typst",
     "id": "typst",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Installs typst, a new markup-based typesetting system that is powerful and easy to learn.",
     "documentationURL": "https://github.com/michidk/devcontainers-features/tree/main/src/typst",
     "options": {
