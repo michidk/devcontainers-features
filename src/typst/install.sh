@@ -97,9 +97,10 @@ export DEBIAN_FRONTEND=noninteractive
 
 check_packages dpkg xz-utils
 
-architecture="$(dpkg --print-architecture|grep -oP 'amd64')"
-if [ "${architecture}" != "amd64" ]; then
-    echo "(!) Architecture $architecture unsupported"
+architecture="$(dpkg --print-architecture)"
+# Typst supports arm architecture after v0.3.0
+if [ "${architecture}" != "amd64" ] && ([ $TYPST_VERSION == '0.2.0'] || [ $TYPST_VERSION == '0.1.0']); then
+    echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
     exit 1
 fi
 
