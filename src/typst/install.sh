@@ -99,7 +99,7 @@ check_packages dpkg xz-utils
 
 architecture="$(dpkg --print-architecture)"
 # Typst has arm support starting at v0.3.0
-if [ "${architecture}" != "amd64" ] && ([ $TYPST_VERSION == '0.2.0'] || [ $TYPST_VERSION == '0.1.0']); then
+if [ "${architecture}" != "amd64" ] && ([ $TYPST_VERSION = '0.2.0' ] || [ $TYPST_VERSION = '0.1.0' ]); then
     echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
     exit 1
 fi
