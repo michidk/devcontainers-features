@@ -93,15 +93,43 @@ find_version_from_git_tags() {
     echo "${variable_name}=${!variable_name}"
 }
 
+# https://www.baeldung.com/linux/check-variable-exists-in-list
+function exists_in_list() {
+    LIST=$1
+    DELIMITER=$2
+    VALUE=$3
+    LIST_WHITESPACES=`echo $LIST | tr "$DELIMITER" " "`
+    for x in $LIST_WHITESPACES; do
+        if [ "$x" = "$VALUE" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 export DEBIAN_FRONTEND=noninteractive
 
 check_packages dpkg xz-utils
 
-architecture="$(dpkg --print-architecture)"
-# Typst has arm support starting at v0.3.0
-if [ "${architecture}" != "amd64" ] && ([ $TYPST_VERSION = '0.2.0' ] || [ $TYPST_VERSION = '0.1.0' ]); then
+# supported architectures in version 0.3.0 and beyond (with musl)
+# Before 0.3.0, typst only supports x86_64
+SUPPORTED_ARCHS="aarch64 x86_64"
+
+architecture="$(uname -m)"
+
+# check if the version starts with 0.2 or 0.1 ("older" versions)
+# https://stackoverflow.com/a/2172367
+if [ $TYPST_VERSION = '0.2.0' ] || [ $TYPST_VERSION = '0.1.0' ]; then
+    if [[ "${architecture}" != "x86_64" ]]; then
+        echo "(!) Architecture $architecture unsupported for older Typst version v$TYPST_VERSION!"
+        exit 1
+    fi
+# check support for "newer" versions
+elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
     echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
     exit 1
+else
+    echo "Arch test finished. Typst should be good to go!"
 fi
 
 # Soft version matching
@@ -110,7 +138,7 @@ find_version_from_git_tags TYPST_VERSION "https://github.com/typst/typst"
 check_packages curl ca-certificates
 echo "Downloading typst version ${TYPST_VERSION}..."
 mkdir -p /tmp/typst
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-$(uname -m)-unknown-linux-musl.tar.xz" | tar xJf - -C /tmp/typst
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-musl.tar.xz" | tar xJf - -C /tmp/typst
 mv "/tmp/typst//typst-$(uname -m)-unknown-linux-musl/typst" /usr/local/bin/typst
 rm -rf /tmp/typst
 
