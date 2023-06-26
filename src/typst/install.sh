@@ -129,7 +129,7 @@ elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
     echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
     exit 1
 else
-    echo "Arch test finished. Typst should be good to go!"
+    echo "Your platform architecture is supported by Typst version v$TYPST_VERSION!"
 fi
 
 # Soft version matching
