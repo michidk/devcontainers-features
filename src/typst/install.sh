@@ -124,12 +124,17 @@ if [[ $TYPST_VERSION == '0.2'* ]] || [[ $TYPST_VERSION == '0.1'* ]]; then
         echo "(!) Architecture $architecture unsupported for older Typst version v$TYPST_VERSION!"
         exit 1
     fi
+    # typst only supports gnu libc for v0.1 and 0.2
+    # Also, for these versions, the extension is `tar.gz`
+    LIBC_AND_EXTENSION="gnu.tar.gz" 
 # check support for "newer" versions
 elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
     echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
     exit 1
 else
     echo "Your platform architecture is supported by Typst version v$TYPST_VERSION!"
+    # (at least for version 0.3-0.5), typst uses musl, with `tar.xz` extension
+    LIBC_AND_EXTENSION="musl.tar.xz"
 fi
 
 # Soft version matching
@@ -138,7 +143,7 @@ find_version_from_git_tags TYPST_VERSION "https://github.com/typst/typst"
 check_packages curl ca-certificates
 echo "Downloading typst version ${TYPST_VERSION}..."
 mkdir -p /tmp/typst
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-musl.tar.xz" | tar xJf - -C /tmp/typst
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}" | tar xJf - -C /tmp/typst
 mv "/tmp/typst//typst-$(uname -m)-unknown-linux-musl/typst" /usr/local/bin/typst
 rm -rf /tmp/typst
 
