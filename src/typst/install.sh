@@ -142,8 +142,17 @@ find_version_from_git_tags TYPST_VERSION "https://github.com/typst/typst"
 
 check_packages curl ca-certificates
 echo "Downloading typst version ${TYPST_VERSION}..."
+
 mkdir -p /tmp/typst
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}" | tar xJf - -C /tmp/typst
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}" -o "/tmp/typst-${LIBC_AND_EXTENSION}"
+
+# we need tar extraction commands for the different extensions
+if [ $LIBC_AND_EXTENSION = "gnu.tar.gz" ]; then
+    tar xfz "/tmp/typst-${LIBC_AND_EXTENSION}" -C /tmp/typst
+else
+    tar xfJ "/tmp/typst-${LIBC_AND_EXTENSION}" -C /tmp/typst
+fi
+
 mv "/tmp/typst//typst-$(uname -m)-unknown-linux-musl/typst" /usr/local/bin/typst
 rm -rf /tmp/typst
 
@@ -151,3 +160,8 @@ rm -rf /tmp/typst
 cleanup
 
 echo "Done!"
+
+export TYPST_VERSION="0.2.0"
+export architecture="$(uname -m)"
+export LIBC_AND_EXTENSION="gnu.tar.gz"
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}"
