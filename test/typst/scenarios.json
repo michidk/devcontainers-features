@@ -1,0 +1,18 @@
+{
+    "v0.2": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "typst": {
+                "version": "0.2.0"
+            }
+        }
+    },
+    "v0.5": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "typst": {
+                "version": "0.5.0"
+            }
+        }
+    }
+}
