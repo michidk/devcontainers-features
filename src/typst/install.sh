@@ -126,7 +126,8 @@ if [[ $TYPST_VERSION == '0.2'* ]] || [[ $TYPST_VERSION == '0.1'* ]]; then
     fi
     # typst only supports gnu libc for v0.1 and 0.2
     # Also, for these versions, the extension is `tar.gz`
-    LIBC_AND_EXTENSION="gnu.tar.gz" 
+    LIBC="gnu" 
+    EXTENSION="tar.gz"
 # check support for "newer" versions
 elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
     echo "(!) Architecture $architecture unsupported for Typst version v$TYPST_VERSION!"
@@ -134,7 +135,8 @@ elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
 else
     echo "Your platform architecture is supported by Typst version v$TYPST_VERSION!"
     # (at least for version 0.3-0.5), typst uses musl, with `tar.xz` extension
-    LIBC_AND_EXTENSION="musl.tar.xz"
+    LIBC="musl"
+    EXTENSION="tar.xz"
 fi
 
 # Soft version matching
@@ -144,24 +146,20 @@ check_packages curl ca-certificates
 echo "Downloading typst version ${TYPST_VERSION}..."
 
 mkdir -p /tmp/typst
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}" -o "/tmp/typst-${LIBC_AND_EXTENSION}"
+BIN_PATH="/tmp/typst-v${TYPST_VERSION}-${architecture}-${LIBC}-${EXTENSION}"
+curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC}.${EXTENSION}" -o "$BIN_PATH"
 
 # we need tar extraction commands for the different extensions
-if [ $LIBC_AND_EXTENSION = "gnu.tar.gz" ]; then
-    tar xfz "/tmp/typst-${LIBC_AND_EXTENSION}" -C /tmp/typst
+if [ $EXTENSION = "tar.gz" ]; then
+    tar xfz "$BIN_PATH" -C /tmp/typst
 else
-    tar xfJ "/tmp/typst-${LIBC_AND_EXTENSION}" -C /tmp/typst
+    tar xfJ "$BIN_PATH" -C /tmp/typst
 fi
 
-mv "/tmp/typst//typst-$(uname -m)-unknown-linux-musl/typst" /usr/local/bin/typst
+mv "/tmp/typst/typst-$(uname -m)-unknown-linux-${LIBC}/typst" /usr/local/bin/typst
 rm -rf /tmp/typst
 
 # Clean up
 cleanup
 
 echo "Done!"
-
-export TYPST_VERSION="0.2.0"
-export architecture="$(uname -m)"
-export LIBC_AND_EXTENSION="gnu.tar.gz"
-curl -sL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-${architecture}-unknown-linux-${LIBC_AND_EXTENSION}"
