@@ -126,7 +126,7 @@ if [[ $TYPST_VERSION == '0.2'* ]] || [[ $TYPST_VERSION == '0.1'* ]]; then
     fi
     # typst only supports gnu libc for v0.1 and 0.2
     # Also, for these versions, the extension is `tar.gz`
-    LIBC="gnu" 
+    LIBC="gnu"
     EXTENSION="tar.gz"
 # check support for "newer" versions
 elif ! exists_in_list "$SUPPORTED_ARCHS" " " $architecture; then
