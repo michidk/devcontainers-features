@@ -21,12 +21,6 @@
             "typst": { "version": "0.2.0" }
         }
     },
-    "javascript-node-0-18": {
-        "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
-        "features": {
-            "typst": { "version": "0.2.0" }
-        }
-    },
     "javascript-node-0-18-latest": {
         "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
         "features": {
