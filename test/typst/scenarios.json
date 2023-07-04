@@ -1,0 +1,30 @@
+{
+    "v0.2": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "typst": {
+                "version": "0.2.0"
+            }
+        }
+    },
+    "v0.5": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "typst": {
+                "version": "0.5.0"
+            }
+        }
+    },
+    "javascript-node-18": {
+        "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+        "features": {
+            "typst": { "version": "0.2.0" }
+        }
+    },
+    "javascript-node-0-18-latest": {
+        "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+        "features": {
+            "typst": {}
+        }
+    }
+}
