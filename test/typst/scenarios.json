@@ -26,5 +26,11 @@
         "features": {
             "typst": {}
         }
+    },
+    "v0.10": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "typst": { "version": "0.10.0" }
+        }
     }
 }
