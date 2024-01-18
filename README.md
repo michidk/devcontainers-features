@@ -9,6 +9,7 @@ This project **Features** is a set of reusable 'features'. Quickly add a tool/cl
 **List of features:**
 
 * [typst](src/typst/README.md): Install [typst](https://github.com/typst/typst)
+* [bun](src/bun/README.md): Install [bun](https://bun.sh)
 
 ## Usage
 
