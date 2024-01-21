@@ -119,7 +119,7 @@ architecture="$(uname -m)"
 
 # check if the version starts with 0.2 or 0.1 ("older" versions)
 # https://stackoverflow.com/a/2172367
-if [[ $TYPST_VERSION == '0.2'* ]] || [[ $TYPST_VERSION == '0.1'* ]]; then
+if [[ $TYPST_VERSION == '0.2.'* ]] || [[ $TYPST_VERSION == '0.1.'* ]]; then
   if [[ "${architecture}" != "x86_64" ]]; then
     echo "(!) Architecture $architecture unsupported for older Typst version v$TYPST_VERSION!"
     exit 1
