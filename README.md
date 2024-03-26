@@ -2,7 +2,7 @@
 
 This project **Features** is a set of reusable 'features'. Quickly add a tool/cli to a development container.
 
-*Features* are self-contained units of installation code and development container configuration. Features are designed to install atop a wide-range of base container images (this repo focuses on **debian based images**).
+*Features* are self-contained units of installation code and development container configuration. Features are designed to install atop a wide range of base container images (this repo focuses on **debian-based images**).
 
 > This repo follows the [**proposed**  dev container feature distribution specification](https://containers.dev/implementors/features-distribution/).
 
@@ -10,6 +10,7 @@ This project **Features** is a set of reusable 'features'. Quickly add a tool/cl
 
 * [typst](src/typst/README.md): Install [typst](https://github.com/typst/typst)
 * [bun](src/bun/README.md): Install [bun](https://bun.sh)
+* [typos](src/typos/README.md): Install [typos](https://github.com/crate-ci/typos)
 
 ## Usage
 

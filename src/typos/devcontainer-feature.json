@@ -1,0 +1,10 @@
+{
+    "name": "typos",
+    "id": "typos",
+    "version": "1.0.0",
+    "description": "Installs typos, a fast source code spell checker.",
+    "documentationURL": "https://github.com/michidk/devcontainers-features/tree/main/src/typos",
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
+}
