@@ -1,7 +1,7 @@
 {
     "name": "bun",
     "id": "bun",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Installs bun, a fast all-in-one JavaScript runtime.",
     "documentationURL": "https://github.com/michidk/devcontainers-features/tree/main/src/bun",
     "installsAfter": [

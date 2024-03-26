@@ -111,7 +111,7 @@ fi
 install_env=BUN_INSTALL
 bin_env=\$$install_env/bin
 
-install_dir=${!install_env:-$HOME/.bun}
+install_dir="/usr/local"
 bin_dir=$install_dir/bin
 exe=$bin_dir/bun
 
