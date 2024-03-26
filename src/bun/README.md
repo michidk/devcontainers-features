@@ -17,4 +17,4 @@ Installs bun, a fast all-in-one JavaScript runtime.
 
 ---
 
-_Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/michidk/devcontainers-features/blob/main/src/bun/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
+_Note: This file was auto-generated from the [devcontainer-feature.json](devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
