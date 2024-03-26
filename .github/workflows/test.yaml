@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         features:
+          - bun
+          - typos
           - typst
         baseImage:
           - debian:latest
@@ -33,6 +35,8 @@ jobs:
     strategy:
       matrix:
         features:
+          - bun
+          - typos
           - typst
     steps:
       - uses: actions/checkout@v3
