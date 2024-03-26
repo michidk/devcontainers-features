@@ -1,8 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
+
 
 # inspired by https://github.com/guiyomh/features/blob/main/src/just/install.sh
 TYPST_VERSION=${VERSION:-"latest"}
-set -e
 
 # shellcheck source=/dev/null
 source /etc/os-release
