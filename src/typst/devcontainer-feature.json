@@ -1,7 +1,7 @@
 {
     "name": "typst",
     "id": "typst",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Installs typst, a new markup-based typesetting system that is powerful and easy to learn.",
     "documentationURL": "https://github.com/michidk/devcontainers-features/tree/main/src/typst",
     "options": {
@@ -19,5 +19,12 @@
     },
     "installsAfter": [
         "ghcr.io/devcontainers/features/common-utils"
-    ]
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "myriad-dreamin.tinymist"
+            ]
+        }
+    }
 }
