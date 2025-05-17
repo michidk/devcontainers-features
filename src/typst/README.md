@@ -17,6 +17,12 @@ Installs typst, a new markup-based typesetting system that is powerful and easy 
 |-----|-----|-----|-----|
 | version | Select version of typst. | string | latest |
 
+## Customizations
+
+### VS Code Extensions
+
+- `myriad-dreamin.tinymist`
+
 ## OS and Arch Support
 
 **For v0.3 and up**, ARM and AMD architectures are supported. Ubuntu and Debian images are tested in CI.
